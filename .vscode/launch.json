@@ -26,7 +26,7 @@
         },
         {
             "name": "Renderer",
-            "address": "169.254.45.82",
+            // "address": "169.254.45.82",
             "port": 9222,
             "type": "chrome",
             "request": "attach",
@@ -34,7 +34,7 @@
         },
         {
             "name": "Attach Main",
-            "address": "169.254.45.82",
+            // "address": "169.254.45.82",
             "port": 9229,
             "type": "node",
             "request": "attach",
