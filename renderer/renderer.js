@@ -5,6 +5,7 @@
  * `contextIsolation` is turned on. Use the contextBridge API in `preload.js`
  * to expose Node.js functionality from the main process.
  */
+const log = __electronLog
 
 var gClickCout = 0;
 const inputTitle = document.getElementById('inputTitle')
@@ -12,7 +13,7 @@ const btnChangeTitle = document.getElementById('btnChangeTitle')
 const btnClickCount = document.getElementById('btnClickCount')
 
 if (btnChangeTitle == null){
-    console.log('null element')
+    log.info('null element')
 }
 btnChangeTitle.addEventListener('click', () => {
     const title = inputTitle.value
@@ -28,7 +29,7 @@ btnClickCount.addEventListener('click', () => {
 })
 
 setInterval(() => {
-    console.log('This is a log message from the renderer process.');
+    // log.info('This is a log message from the renderer process.');
 }, 1000);
 
-console.log('logger testing');
+log.info('renderer logger testing');

@@ -8,8 +8,11 @@
  */
 
 const {contextBridge, ipcRenderer} = require('electron')
+// const log = require('electron-log')
 
-console.log("inside preload.js")
+// 日志模块初始化
+__electronLog.info("inside preload.js", {a:1})
+// log.info("inside preload.js")
 
 window.addEventListener('DOMContentLoaded', () => {
   const replaceText = (selector, text) => {

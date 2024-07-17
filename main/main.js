@@ -1,6 +1,12 @@
 // Modules to control application life and create native browser window
 const { app, ipcMain, nativeImage, BrowserWindow } = require('electron')
+const log = require('electron-log/main')
 const path = require('node:path')
+
+// 日志模块初始化
+log.initialize()
+log.eventLogger.startLogging()
+// log.transports.file.fileName = ""
 
 function createWindow () {
   // Create the browser window.
@@ -26,27 +32,27 @@ function createWindow () {
     {
       tooltip: 'button1',
       icon: nativeImage.createFromPath(path.join(__dirname, '../res/thumbar_extension/button1.png')),
-      click () { console.log('button1 clicked') }
+      click () { log.info('button1 clicked') }
     },
     {
       tooltip: 'button2',
       icon: nativeImage.createFromPath(path.join(__dirname, '../res/thumbar_extension/button2.png')),
       flags: ['dismissonclick'], // 使用 enable 标志将无法展示缩略图按钮
-      click () { console.log('button2 clicked.') }
+      click () { log.info('button2 clicked.') }
     }
   ]
   var resFlag = mainWindow.setThumbarButtons(thumbarBtns)
-  console.log("setThumbarButtons result flags : ", resFlag)
+  log.info("setThumbarButtons result flags : ", resFlag)
 
   mainWindow.on("ready-to-show", () => {
   })
 
   mainWindow.webContents.debugger.on('detach', (event, reason) => {
-    console.log('Debugger detached due to : ', reason)
+    log.info('Debugger detached due to : ', reason)
   })
 
   mainWindow.webContents.debugger.on('message', (event, method, params) => {
-    console.log('Debugger message : ', method, params)
+    log.info('Debugger message : ', method, params)
   })
 }
 
@@ -65,11 +71,11 @@ app.setUserTasks([
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-  console.log('app.whenReady() before createWindow() ...')
+  log.info('app.whenReady() before createWindow() ...')
   createWindow()
 
   app.on('activate', function () {
-    console.log('app.on active ...')
+    log.info('app.on active ...')
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -77,18 +83,18 @@ app.whenReady().then(() => {
 })
 
 app.on('ready', function() {
-  console.log('app.on ready ...')
+  log.info('app.on ready ...')
 })
 
 app.on('will-finish-launching', function() {
-  console.log('app.on will-finish-launching ...')
+  log.info('app.on will-finish-launching ...')
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', function () {
-  console.log('app.on window-all-closed ...')
+  log.info('app.on window-all-closed ...')
   if (process.platform !== 'darwin') {
     app.quit()
   }
@@ -98,19 +104,19 @@ app.on('window-all-closed', function () {
 // code. You can also put them in separate files and require them here.
 
 app.on('will-quit', function() {
-  console.log('app.on will-quit ...')
+  log.info('app.on will-quit ...')
 })
 
 app.on('before-quit', function() {
-  console.log('app.on before-quit ...')
+  log.info('app.on before-quit ...')
 })
 
 app.on('quit', function() {
-  console.log('app.on quit ...')
+  log.info('app.on quit ...')
 })
 
 app.on('web-contents-created', function() {
-  console.log('app.on web-contents-created ...')
+  log.info('app.on web-contents-created ...')
 })
 
 ipcMain.on('Set-Title', (event, title) => {

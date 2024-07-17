@@ -7,18 +7,20 @@
     "start": "electron .",
     "build": "electron-builder"
   },
-  "build":{
+  "build": {
     "appId": "com.tools.shuanglong",
-    "win":{
+    "win": {
       "icon": "res/AppIcon.png",
-      "target":[
+      "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ]
     },
-    "nsis":{
+    "nsis": {
       "oneClick": false,
       "perMachine": true,
       "allowToChangeInstallationDirectory": true
@@ -37,5 +39,8 @@
   "devDependencies": {
     "electron": "^31.2.0",
     "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "electron-log": "^5.1.6"
   }
 }
