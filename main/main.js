@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, ipcMain, nativeImage, BrowserWindow } = require('electron')
 const path = require('node:path')
 
 function createWindow () {
@@ -7,17 +7,39 @@ function createWindow () {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    frame: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, '../renderer/preload.js')
     }
   })
 
+  // mainWindow.setMenu(null);
+
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  mainWindow.loadFile('renderer/index.html')
   // mainWindow.loadURL('https://www.baidu.com/index.html')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+
+  const thumbarBtns = [
+    {
+      tooltip: 'button1',
+      icon: nativeImage.createFromPath(path.join(__dirname, '../res/thumbar_extension/button1.png')),
+      click () { console.log('button1 clicked') }
+    },
+    {
+      tooltip: 'button2',
+      icon: nativeImage.createFromPath(path.join(__dirname, '../res/thumbar_extension/button2.png')),
+      flags: ['dismissonclick'], // 使用 enable 标志将无法展示缩略图按钮
+      click () { console.log('button2 clicked.') }
+    }
+  ]
+  var resFlag = mainWindow.setThumbarButtons(thumbarBtns)
+  console.log("setThumbarButtons result flags : ", resFlag)
+
+  mainWindow.on("ready-to-show", () => {
+  })
 
   mainWindow.webContents.debugger.on('detach', (event, reason) => {
     console.log('Debugger detached due to : ', reason)
@@ -27,6 +49,17 @@ function createWindow () {
     console.log('Debugger message : ', method, params)
   })
 }
+
+app.setUserTasks([
+  {
+    program: process.execPath,
+    arguments: '--new-window',
+    iconPath: path.join(__dirname, 'AppIcon.png'),
+    iconIndex: 0,
+    title: 'New Window',
+    description: 'Create a new window'
+  }
+])
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
