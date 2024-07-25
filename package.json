@@ -37,7 +37,7 @@
   "author": "Shuanglong",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^31.2.0",
+    "electron": "^31.3.0",
     "electron-builder": "^24.13.3"
   },
   "dependencies": {
