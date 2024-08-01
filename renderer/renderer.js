@@ -26,6 +26,7 @@ btnClickCount.addEventListener('click', () => {
     if (spanClickCount) {
         spanClickCount.innerText = gClickCout
     }
+    window.electronAPI.SetProgressBar(gClickCout)
 })
 
 setInterval(() => {

@@ -26,5 +26,6 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  SetTitle: (title)=>ipcRenderer.send('Set-Title', title)
+  SetTitle: (title)=>ipcRenderer.send('Set-Title', title),
+  SetProgressBar: (progress)=>ipcRenderer.send('Set-Progress-Bar', progress)
 })

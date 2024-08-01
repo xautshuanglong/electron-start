@@ -124,3 +124,11 @@ ipcMain.on('Set-Title', (event, title) => {
   const window = BrowserWindow.fromWebContents(webContent)
   window.setTitle(title)
 })
+
+ipcMain.on('Set-Progress-Bar', (event, progress) => {
+  let percent = progress % 100 / 100
+  log.info('current percent : ', percent)
+  const webContent = event.sender
+  const window = BrowserWindow.fromWebContents(webContent)
+  window.setProgressBar(percent)
+})
