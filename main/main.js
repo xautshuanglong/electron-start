@@ -126,8 +126,13 @@ ipcMain.on('Set-Title', (event, title) => {
 })
 
 ipcMain.on('Set-Progress-Bar', (event, progress) => {
-  let percent = progress % 100 / 100
-  log.info('current percent : ', percent)
+  if (progress % 100 == 0){
+    progress = 100
+  } else {
+    progress %= 100
+  }
+  let percent = progress / 100.00
+  log.info('current percent : ', percent.toFixed(2))
   const webContent = event.sender
   const window = BrowserWindow.fromWebContents(webContent)
   window.setProgressBar(percent)
