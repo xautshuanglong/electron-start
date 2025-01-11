@@ -13,13 +13,13 @@ function createWindow () {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    frame: true,
+    frame: true, // 菜单栏 和 系统按钮均被删除 最下化、最大化/还原、关闭）
     webPreferences: {
       preload: path.join(__dirname, '../renderer/preload.js')
     }
   })
 
-  // mainWindow.setMenu(null);
+  // mainWindow.setMenu(null); // 只移除默认菜单栏，系统按钮还在（最下化、最大化/还原、关闭）
 
   // and load the index.html of the app.
   mainWindow.loadFile('renderer/index.html')
