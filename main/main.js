@@ -8,6 +8,23 @@ log.initialize()
 log.eventLogger.startLogging()
 // log.transports.file.fileName = ""
 
+
+
+// Node Addon Testing
+
+var addon = require('bindings')('hello-nan');
+console.log(addon.hello1());
+
+var addon = require('bindings')('hello-node-api');
+console.log(addon.hello2());
+
+var addon = require('bindings')('hello-node-addon');
+console.log(addon.hello3());
+console.log(addon.hello4());
+
+
+
+
 function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({

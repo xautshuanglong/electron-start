@@ -7,6 +7,7 @@
     "start": "electron .",
     "build": "electron-builder"
   },
+  "gypfile": true,
   "build": {
     "appId": "com.tools.shuanglong",
     "win": {
@@ -30,14 +31,12 @@
   "repository": "https://github.com/xautshuanglong/electron-start",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "Demo"
   ],
   "author": "Shuanglong",
   "license": "CC0-1.0",
   "devDependencies": {
+    "@electron/rebuild": "^3.7.1",
     "bindings": "^1.5.0",
     "electron": "^31.2.0",
     "electron-builder": "^24.13.3",
