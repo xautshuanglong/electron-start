@@ -14,13 +14,5 @@
     "sources": [
       "addons/hello-node-api/napi-test.cc",
     ],
-  }, {
-    "target_name": "hello-nan",
-    "sources": [
-      "addons/hello-nan/nan-test.cc",
-    ],
-    "include_dirs": [
-      "<!(node -e \"require('nan')\")",
-    ]
   }]
 }

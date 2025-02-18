@@ -1,5 +1,7 @@
 // Modules to control application life and create native browser window
-const { app, ipcMain, nativeImage, BrowserWindow } = require('electron')
+const { app, ipcMain, crashReporter,
+  nativeImage, BrowserWindow,
+  utilityProcess, MessageChannelMain } = require('electron')
 const log = require('electron-log/main')
 const path = require('node:path')
 
@@ -8,22 +10,44 @@ log.initialize()
 log.eventLogger.startLogging()
 // log.transports.file.fileName = ""
 
-
-
 // Node Addon Testing
+try{
+  // var addon = require('bindings')('hello-nan');
+  // console.log(addon.hello1());
+  
+  var addon = require('bindings')('hello-node-api');
+  console.log(addon.hello2());
+  
+  var addon = require('bindings')('hello-node-addon');
+  console.log(addon.hello3());
+  console.log(addon.hello4());
+} catch (error) {
+  console.log("require binding addon failed! ", error)
+}
 
-var addon = require('bindings')('hello-nan');
-console.log(addon.hello1());
+// Utility Process Testing
+try {
+  const { main_port, utility_port } = new MessageChannelMain()
 
-var addon = require('bindings')('hello-node-api');
-console.log(addon.hello2());
+  console.log(app.getPath('crashDumps'))
+  crashReporter.start({ submitURL: '', uploadToServer: false })
 
-var addon = require('bindings')('hello-node-addon');
-console.log(addon.hello3());
-console.log(addon.hello4());
+  var js_filename = path.join(__dirname, '../utility/utility.js')
+  console.log("js_filename =", js_filename)
+  const child = utilityProcess.fork(js_filename)
+  console.log(child.pid)
+  child.postMessage({ message: 'hello' }, [main_port])
 
+  child.on('spawn', () => {
+    console.log(child.pid)
+  })
 
-
+  child.on('exit', () => {
+    console.log(child.pid)
+  })
+} catch (error) {
+  console.log("create utility process failed! ", error)
+}
 
 function createWindow () {
   // Create the browser window.

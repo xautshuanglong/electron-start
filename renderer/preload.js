@@ -7,6 +7,13 @@
  * https://www.electronjs.org/docs/latest/tutorial/sandbox
  */
 
+try{
+  var addon = require('bindings')('hello-nan');
+  console.log(addon.hello1());
+} catch (error) {
+  console.log("require binding addon failed! ", error)
+}
+
 const {contextBridge, ipcRenderer} = require('electron')
 // const log = require('electron-log')
 

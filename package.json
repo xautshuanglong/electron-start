@@ -1,5 +1,5 @@
 {
-  "name": "electron-quick-start",
+  "name": "electron-start",
   "version": "1.0.0",
   "description": "A minimal Electron application",
   "main": "main/main.js",
@@ -38,8 +38,8 @@
   "devDependencies": {
     "@electron/rebuild": "^3.7.1",
     "bindings": "^1.5.0",
-    "electron": "^31.2.0",
-    "electron-builder": "^24.13.3",
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8",
     "nan": "^2.22.0",
     "node-addon-api": "^8.3.0"
   },

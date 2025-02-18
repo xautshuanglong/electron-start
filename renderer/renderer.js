@@ -5,6 +5,14 @@
  * `contextIsolation` is turned on. Use the contextBridge API in `preload.js`
  * to expose Node.js functionality from the main process.
  */
+
+try {
+    var addon = require('bindings')('hello-nan');
+    console.log(addon.hello1());
+} catch (error) {
+    console.log("require binding addon failed! ", error)
+}
+
 const log = __electronLog
 
 var gClickCout = 0;
