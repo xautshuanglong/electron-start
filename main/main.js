@@ -12,9 +12,6 @@ log.eventLogger.startLogging()
 
 // Node Addon Testing
 try{
-  // var addon = require('bindings')('hello-nan');
-  // console.log(addon.hello1());
-  
   var addon = require('bindings')('hello-node-api');
   console.log(addon.hello2());
   

@@ -8,10 +8,10 @@
  */
 
 try{
-  var addon = require('bindings')('hello-nan');
-  console.log(addon.hello1());
+  var addon = require('bindings')('hello-node-api');
+  __electronLog.info(addon.hello1());
 } catch (error) {
-  console.log("require binding addon failed! ", error)
+  __electronLog.info("require binding addon failed! ", error)
 }
 
 const {contextBridge, ipcRenderer} = require('electron')
