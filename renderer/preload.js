@@ -8,10 +8,11 @@
  */
 
 try{
+  // renderer process 中使用 nodeaddon 需要在 main.js 加载 preload.js 时关闭沙箱
   var addon = require('bindings')('hello-node-api');
-  __electronLog.info(addon.hello1());
+  __electronLog.info(addon.hello2());
 } catch (error) {
-  __electronLog.info("require binding addon failed! ", error)
+  __electronLog.info("preload.js require binding addon failed! ", error)
 }
 
 const {contextBridge, ipcRenderer} = require('electron')

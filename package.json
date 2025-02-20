@@ -2,10 +2,18 @@
   "name": "electron-start",
   "version": "1.0.0",
   "description": "A minimal Electron application",
+  "keywords": [
+    "Electron",
+    "Demo"
+  ],
+  "repository": "https://github.com/xautshuanglong/electron-start",
+  "author": "Shuanglong",
+  "license": "CC0-1.0",
   "main": "main/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "gypfile": true,
   "build": {
@@ -28,13 +36,6 @@
       "allowToChangeInstallationDirectory": true
     }
   },
-  "repository": "https://github.com/xautshuanglong/electron-start",
-  "keywords": [
-    "Electron",
-    "Demo"
-  ],
-  "author": "Shuanglong",
-  "license": "CC0-1.0",
   "devDependencies": {
     "@electron/rebuild": "^3.7.1",
     "bindings": "^1.5.0",

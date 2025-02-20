@@ -19,32 +19,32 @@ try{
   console.log(addon.hello3());
   console.log(addon.hello4());
 } catch (error) {
-  console.log("require binding addon failed! ", error)
+  console.log("main.js require binding addon failed! ", error)
 }
 
 // Utility Process Testing
-try {
-  const { main_port, utility_port } = new MessageChannelMain()
+// try {
+//   const { main_port, utility_port } = new MessageChannelMain()
 
-  console.log(app.getPath('crashDumps'))
-  crashReporter.start({ submitURL: '', uploadToServer: false })
+//   console.log(app.getPath('crashDumps'))
+//   crashReporter.start({ submitURL: '', uploadToServer: false })
 
-  var js_filename = path.join(__dirname, '../utility/utility.js')
-  console.log("js_filename =", js_filename)
-  const child = utilityProcess.fork(js_filename)
-  console.log(child.pid)
-  child.postMessage({ message: 'hello' }, [main_port])
+//   var js_filename = path.join(__dirname, '../utility/utility.js')
+//   console.log("js_filename =", js_filename)
+//   const child = utilityProcess.fork(js_filename)
+//   console.log(child.pid)
+//   child.postMessage({ message: 'hello' }, [main_port])
 
-  child.on('spawn', () => {
-    console.log(child.pid)
-  })
+//   child.on('spawn', () => {
+//     console.log(child.pid)
+//   })
 
-  child.on('exit', () => {
-    console.log(child.pid)
-  })
-} catch (error) {
-  console.log("create utility process failed! ", error)
-}
+//   child.on('exit', () => {
+//     console.log(child.pid)
+//   })
+// } catch (error) {
+//   console.log("create utility process failed! ", error)
+// }
 
 function createWindow () {
   // Create the browser window.
@@ -53,6 +53,7 @@ function createWindow () {
     height: 600,
     frame: true, // 菜单栏 和 系统按钮均被删除 最下化、最大化/还原、关闭）
     webPreferences: {
+      // sandbox: false, // 默认情况下沙箱是开启状态，因安全考虑在 preload.js 中加载 nodeaddon 会失败。
       preload: path.join(__dirname, '../renderer/preload.js')
     }
   })
