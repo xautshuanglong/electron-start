@@ -37,3 +37,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   SetTitle: (title)=>ipcRenderer.send('Set-Title', title),
   SetProgressBar: (progress)=>ipcRenderer.send('Set-Progress-Bar', progress)
 })
+
+console.log('preload.js process =', process)
+console.log('preload.js pid =', process.pid)
+console.log('preload.js argv =', process.argv)

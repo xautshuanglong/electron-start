@@ -14,37 +14,13 @@ log.eventLogger.startLogging()
 try{
   var addon = require('bindings')('hello-node-api');
   console.log(addon.hello2());
-  
+
   var addon = require('bindings')('hello-node-addon');
   console.log(addon.hello3());
   console.log(addon.hello4());
 } catch (error) {
   console.log("main.js require binding addon failed! ", error)
 }
-
-// Utility Process Testing
-// try {
-//   const { main_port, utility_port } = new MessageChannelMain()
-
-//   console.log(app.getPath('crashDumps'))
-//   crashReporter.start({ submitURL: '', uploadToServer: false })
-
-//   var js_filename = path.join(__dirname, '../utility/utility.js')
-//   console.log("js_filename =", js_filename)
-//   const child = utilityProcess.fork(js_filename)
-//   console.log(child.pid)
-//   child.postMessage({ message: 'hello' }, [main_port])
-
-//   child.on('spawn', () => {
-//     console.log(child.pid)
-//   })
-
-//   child.on('exit', () => {
-//     console.log(child.pid)
-//   })
-// } catch (error) {
-//   console.log("create utility process failed! ", error)
-// }
 
 function createWindow () {
   // Create the browser window.
@@ -162,6 +138,29 @@ ipcMain.on('Set-Title', (event, title) => {
   const webContent = event.sender
   const window = BrowserWindow.fromWebContents(webContent)
   window.setTitle(title)
+
+
+  // Utility Process Testing
+  try {
+    var { render_port, utility_port } = new MessageChannelMain()
+
+    // console.log(app.getPath('crashDumps'))
+    // crashReporter.start({ submitURL: '', uploadToServer: false })
+
+    const child = utilityProcess.fork(path.join(__dirname, '../utility/utility.js'))
+    child.postMessage({ 'Hello' : 'World' })
+
+    child.on('spawn', () => {
+      console.log('spawm child utility process pid =', child.pid)
+    })
+
+    child.on('exit', () => {
+      console.log('exit child utility process pid =', child.pid)
+    })
+  } catch (error) {
+    console.log("create utility process failed! ", error)
+  }
+
 })
 
 ipcMain.on('Set-Progress-Bar', (event, progress) => {

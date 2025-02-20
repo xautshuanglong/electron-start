@@ -1,15 +1,15 @@
-const { process } = require('electron')
 
 console.log("-----------------------");
 
-process.parentPort.once('message', (e) => {
-  const [port] = e.ports
-  // ...
-})
-
 try {
-  var addon = require('bindings')('hello-nan');
-  console.log(addon.hello1());
+  process.parentPort.once('message', (e) => {
+    // const [port] = e.ports
+    console.log('e =',e)
+    console.log('ports =',e.ports)
+  })
+
+  var addon = require('bindings')('hello-node-api');
+  console.log(addon.hello2());
 } catch (error) {
-  console.log("require binding addon failed! ", error)
+  console.log("Utility.js require binding addon failed! ", error)
 }
