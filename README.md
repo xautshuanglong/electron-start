@@ -18,6 +18,68 @@ npm install electron-log --registry https://registry.npmmirror.com
 ### 编译报错
 - 其他
 
+### 调试记录
+- VSCode 调试 node 进程  
+[nodejs-debugging](https://code.visualstudio.com/docs/nodejs/nodejs-debugging)
+
+- 调试设置
+1. 启动、附加。需要被调试进程监听网络端口，
+1. 根据官方 launch.json 指导，调试器外启动应用命令为 node_modules\.bin\electron.cmd . --inspect --remote-debugging-port=9222
+1. 打包后独立运行 <2> 中的命令无效，主进程无法监听调试端口，指定启动后第一行代码break。node_modules\.bin\electron.cmd . --inspect-brk --remote-debugging-port=9222
+1. 调试端口前可指定IP，如：127.0.0.1:9229。--inspect-brk\[=\[host:]port]
+1. 主进程自带跨机器调试，Chromium 因安全考虑关闭了跨机器调试（自带只支持本地调试），可通过端口映射实现渲染进程跨机器调试。
+1. VSCODE launch.json
+    ``` javascript
+    {
+        // Use IntelliSense to learn about possible attributes.
+        // Hover to view descriptions of existing attributes.
+        // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+        "version": "0.2.0",
+        "compounds": [
+            {
+                "name": "Main+Renderer",
+                "configurations": ["Debug Main", "Renderer"],
+                "stopAll": true
+            }
+        ],
+        "configurations": [
+            {
+                "name": "Debug Main",
+                "type": "node",
+                "request": "launch",
+                "cwd": "${workspaceFolder}",
+                "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+                "windows": {
+                    "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+                },
+                "args": [".", "--remote-debugging-port=9222"],
+                "outputCapture": "std",
+                "console": "integratedTerminal"
+            },
+            {
+                "name": "Renderer",
+                "port": 9222,
+                "type": "chrome",
+                "request": "attach",
+                "webRoot": "${workspaceFolder}"
+            },
+            {
+                "name": "Attach Main",
+                "port": 9229,
+                "type": "node",
+                "request": "attach",
+                "cwd": "${workspaceFolder}"
+            },
+            {
+                "name": "Attach Process",
+                "type": "node",
+                "request": "attach",
+                "processId": "${command:PickProcess}"
+            }
+        ]
+    }
+    ```
+
 ### 运行报错
 - 原生`module.node`与`eletron`所依赖的`NodeJS`版本不匹配<br/>
   **[问题描述]**

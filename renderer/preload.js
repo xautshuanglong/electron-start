@@ -7,12 +7,14 @@
  * https://www.electronjs.org/docs/latest/tutorial/sandbox
  */
 
-try{
-  // renderer process 中使用 nodeaddon 需要在 main.js 加载 preload.js 时关闭沙箱
-  var addon = require('bindings')('hello-node-api');
-  __electronLog.info(addon.hello2());
-} catch (error) {
-  __electronLog.info("preload.js require binding addon failed! ", error)
+if (!process.sandboxed){
+  try{
+    // renderer process 中使用 nodeaddon 需要在 main.js 加载 preload.js 时关闭沙箱
+    var addon = require('bindings')('hello-node-api');
+    __electronLog.info(addon.hello2());
+  } catch (error) {
+    __electronLog.info("preload.js require binding addon failed! ", error)
+  }
 }
 
 const {contextBridge, ipcRenderer} = require('electron')
@@ -38,6 +40,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   SetProgressBar: (progress)=>ipcRenderer.send('Set-Progress-Bar', progress)
 })
 
-console.log('preload.js process =', process)
-console.log('preload.js pid =', process.pid)
-console.log('preload.js argv =', process.argv)
+ipcRenderer.on('port', (e) => {
+  // e.ports is a list of ports sent along with this message
+  e.ports[0].onmessage = (msgEvt) => {
+    console.log(msgEvt.data)
+  }
+})

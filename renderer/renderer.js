@@ -31,7 +31,7 @@ btnClickCount.addEventListener('click', () => {
 })
 
 setInterval(() => {
-    // log.info('This is a log message from the renderer process.');
+    log.info('This is a log message from the renderer process.');
 }, 1000);
 
 log.info('renderer logger testing');

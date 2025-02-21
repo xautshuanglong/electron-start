@@ -1,9 +1,11 @@
 // Modules to control application life and create native browser window
-const { app, ipcMain, crashReporter,
-  nativeImage, BrowserWindow,
+const { app, ipcMain, crashReporter, nativeImage, BrowserWindow,
   utilityProcess, MessageChannelMain } = require('electron')
 const log = require('electron-log/main')
 const path = require('node:path')
+
+const { port1, port2 } = new MessageChannelMain()
+var mainWindow = null
 
 // 日志模块初始化
 log.initialize()
@@ -24,7 +26,7 @@ try{
 
 function createWindow () {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     frame: true, // 菜单栏 和 系统按钮均被删除 最下化、最大化/还原、关闭）
@@ -62,6 +64,9 @@ function createWindow () {
   mainWindow.on("ready-to-show", () => {
   })
 
+  // 与 RendererProcess ChannelPort 通信测试
+  mainWindow.webContents.postMessage('port', {'message_test':'content test'}, [port1])
+
   mainWindow.webContents.debugger.on('detach', (event, reason) => {
     log.info('Debugger detached due to : ', reason)
   })
@@ -69,6 +74,25 @@ function createWindow () {
   mainWindow.webContents.debugger.on('message', (event, method, params) => {
     log.info('Debugger message : ', method, params)
   })
+}
+
+// Utility Process Testing
+function spawmUtilityProcess () {
+  try {
+    const child = utilityProcess.fork(path.join(__dirname, '../utility/utility.js'))
+    // UtilityProcess 通信测试
+    child.postMessage({ 'Hello' : 'World' }, [port2])
+
+    child.on('spawn', () => {
+      console.log('spawm child utility process pid =', child.pid)
+    })
+
+    child.on('exit', () => {
+      console.log('exit child utility process pid =', child.pid)
+    })
+  } catch (error) {
+    console.log("create utility process failed! ", error)
+  }
 }
 
 app.setUserTasks([
@@ -93,12 +117,15 @@ app.whenReady().then(() => {
     log.info('app.on active ...')
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
   })
 })
 
 app.on('ready', function() {
   log.info('app.on ready ...')
+  spawmUtilityProcess()
 })
 
 app.on('will-finish-launching', function() {
@@ -139,28 +166,8 @@ ipcMain.on('Set-Title', (event, title) => {
   const window = BrowserWindow.fromWebContents(webContent)
   window.setTitle(title)
 
-
-  // Utility Process Testing
-  try {
-    var { render_port, utility_port } = new MessageChannelMain()
-
-    // console.log(app.getPath('crashDumps'))
-    // crashReporter.start({ submitURL: '', uploadToServer: false })
-
-    const child = utilityProcess.fork(path.join(__dirname, '../utility/utility.js'))
-    child.postMessage({ 'Hello' : 'World' })
-
-    child.on('spawn', () => {
-      console.log('spawm child utility process pid =', child.pid)
-    })
-
-    child.on('exit', () => {
-      console.log('exit child utility process pid =', child.pid)
-    })
-  } catch (error) {
-    console.log("create utility process failed! ", error)
-  }
-
+  port1.postMessage({msgFrom:'main.js port1'})
+  port2.postMessage({msgFrom:'main.js port2'})
 })
 
 ipcMain.on('Set-Progress-Bar', (event, progress) => {
