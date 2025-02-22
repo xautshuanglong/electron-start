@@ -4,9 +4,6 @@ const { app, ipcMain, crashReporter, nativeImage, BrowserWindow,
 const log = require('electron-log/main')
 const path = require('node:path')
 
-const { port1, port2 } = new MessageChannelMain()
-var mainWindow = null
-
 // 日志模块初始化
 log.initialize()
 log.eventLogger.startLogging()
@@ -65,7 +62,10 @@ function createWindow () {
   })
 
   // 与 RendererProcess ChannelPort 通信测试
-  mainWindow.webContents.postMessage('port', {'message_test':'content test'}, [port1])
+  const { port1, port2 } = new MessageChannelMain()
+  mainWindow.webContents.postMessage('port', {'Hello':'World from main.js to webContents with [port1, port2]', 'a':'b'}, [port2])
+  port1.postMessage({message:'main.js post messge with port1 after posting port'})
+  port2.postMessage({message:'main.js post messge with port2 after posting port'})
 
   mainWindow.webContents.debugger.on('detach', (event, reason) => {
     log.info('Debugger detached due to : ', reason)
@@ -81,7 +81,10 @@ function spawmUtilityProcess () {
   try {
     const child = utilityProcess.fork(path.join(__dirname, '../utility/utility.js'))
     // UtilityProcess 通信测试
-    child.postMessage({ 'Hello' : 'World' }, [port2])
+    const { port1, port2 } = new MessageChannelMain()
+    child.postMessage({ 'Hello' : 'World from main.js to utility process with [port1, port2]' }, [port1, port2])
+    port1.postMessage({message:'main.js post messge with port1 inside spawmUtilityProcess'})
+    port2.postMessage({message:'main.js post messge with port2 inside spawmUtilityProcess'})
 
     child.on('spawn', () => {
       console.log('spawm child utility process pid =', child.pid)
@@ -165,9 +168,6 @@ ipcMain.on('Set-Title', (event, title) => {
   const webContent = event.sender
   const window = BrowserWindow.fromWebContents(webContent)
   window.setTitle(title)
-
-  port1.postMessage({msgFrom:'main.js port1'})
-  port2.postMessage({msgFrom:'main.js port2'})
 })
 
 ipcMain.on('Set-Progress-Bar', (event, progress) => {

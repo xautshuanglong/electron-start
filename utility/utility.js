@@ -2,12 +2,16 @@
 console.log("-----------------------");
 
 try {
-  process.parentPort.once('message', (e) => {
+  process.parentPort.on('message', (e) => {
     // const [port] = e.ports
-    console.log('utility.js e =',e.data)
+    console.log('utility.js receive message e =', e)
+    console.log('utility.js receive message e.data =', e.data)
     e.ports[0].onmessage = (msgEvt) => {
-      console.log(msgEvt.data)
+      console.log('utility.js receive message from port[0]', msgEvt.data)
     }
+    // e.ports[1].onmessage = (msgEvt) => {
+    //   console.log('utility.js receive message from port[1]', msgEvt.data)
+    // }
   })
 
   var addon = require('bindings')('hello-node-api');

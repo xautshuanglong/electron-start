@@ -40,9 +40,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
   SetProgressBar: (progress)=>ipcRenderer.send('Set-Progress-Bar', progress)
 })
 
-ipcRenderer.on('port', (e) => {
+ipcRenderer.on('port', (e, data) => {
   // e.ports is a list of ports sent along with this message
+  console.log('preload.js receive message e =', e)
+  console.log('preload.js receive message data =', data)
+  console.log('preload.js receive message data.Hello =', data.Hello)
   e.ports[0].onmessage = (msgEvt) => {
-    console.log(msgEvt.data)
+    console.log('preload.js receive message from port[0]', msgEvt.data)
   }
+  // e.ports[1].onmessage = (msgEvt) => {
+  //   console.log('preload.js receive message from port[1]', msgEvt.data)
+  // }
 })
