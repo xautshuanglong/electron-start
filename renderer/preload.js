@@ -45,10 +45,12 @@ ipcRenderer.on('port', (e, data) => {
   console.log('preload.js receive message e =', e)
   console.log('preload.js receive message data =', data)
   console.log('preload.js receive message data.Hello =', data.Hello)
-  e.ports[0].onmessage = (msgEvt) => {
-    console.log('preload.js receive message from port[0]', msgEvt.data)
+  if (e.ports !== 'undefined'){
+    for (var i=0; i<e.ports.length; ++i) {
+      e.ports[i].onmessage = (msgEvt) => {
+        console.log('preload.js receive message from e.ports ===>', msgEvt.data)
+      }
+      e.ports[i].start()
+    }
   }
-  // e.ports[1].onmessage = (msgEvt) => {
-  //   console.log('preload.js receive message from port[1]', msgEvt.data)
-  // }
 })

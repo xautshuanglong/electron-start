@@ -62,10 +62,11 @@ function createWindow () {
   })
 
   // 与 RendererProcess ChannelPort 通信测试
-  const { port1, port2 } = new MessageChannelMain()
-  mainWindow.webContents.postMessage('port', {'Hello':'World from main.js to webContents with [port1, port2]', 'a':'b'}, [port2])
-  port1.postMessage({message:'main.js post messge with port1 after posting port'})
-  port2.postMessage({message:'main.js post messge with port2 after posting port'})
+  const msgChannel1 = new MessageChannelMain()
+  const msgChannel2 = new MessageChannelMain()
+  mainWindow.webContents.postMessage('port', {'Hello':'World from main.js to webContents with port', 'a':'b'}, [msgChannel1.port2, msgChannel2.port2])
+  msgChannel1.port1.postMessage({message:'main.js post messge with msgChannel1.port1 after posting port'})
+  msgChannel2.port1.postMessage({message:'main.js post messge with msgChannel2.port1 after posting port'})
 
   mainWindow.webContents.debugger.on('detach', (event, reason) => {
     log.info('Debugger detached due to : ', reason)
@@ -81,10 +82,22 @@ function spawmUtilityProcess () {
   try {
     const child = utilityProcess.fork(path.join(__dirname, '../utility/utility.js'))
     // UtilityProcess 通信测试
-    const { port1, port2 } = new MessageChannelMain()
-    child.postMessage({ 'Hello' : 'World from main.js to utility process with [port1, port2]' }, [port1, port2])
-    port1.postMessage({message:'main.js post messge with port1 inside spawmUtilityProcess'})
-    port2.postMessage({message:'main.js post messge with port2 inside spawmUtilityProcess'})
+    const msgCh1 = new MessageChannelMain()
+    const msgCh2 = new MessageChannelMain()
+    child.postMessage({ 'Hello' : 'World from main.js to utility process with port' }, [msgCh1.port2, msgCh2.port2])
+    child.on('message', (data) => {
+      log.info('main.js receive message from child process data ==>', data)
+    })
+
+    console.log('after posting message to utility process')
+    setInterval(() => {
+      // log.info('This is a log message from the main.js  will posting message from port1');
+      msgCh1.port1.postMessage({message:'main.js post messge to utility.js with msgCh1.port1 inside spawmUtilityProcess'})
+      msgCh2.port1.postMessage({message:'main.js post messge to utility.js with msgCh2.port1 inside spawmUtilityProcess'})
+
+      // child 可正常发送消息
+      // child.postMessage({testing:"main.js post message to utility.js whit child.postMessage"})
+    }, 1000);
 
     child.on('spawn', () => {
       console.log('spawm child utility process pid =', child.pid)

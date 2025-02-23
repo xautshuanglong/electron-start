@@ -1,17 +1,27 @@
+const log = require('electron-log/main')
 
 console.log("-----------------------");
 
 try {
   process.parentPort.on('message', (e) => {
-    // const [port] = e.ports
-    console.log('utility.js receive message e =', e)
     console.log('utility.js receive message e.data =', e.data)
-    e.ports[0].onmessage = (msgEvt) => {
-      console.log('utility.js receive message from port[0]', msgEvt.data)
+    process.parentPort.postMessage({'msg':'from utility.js'})
+    if (e.ports !== 'undefined'){
+      for (var i=0; i<e.ports.length; ++i) {
+        e.ports[i].on('message', (msgEvt) => {
+          log.info(`utility.js receive message from e.ports ===> ${msgEvt.data.message}`)
+        })
+        log.info('utility.js e.ports[i].start() ...')
+        e.ports[i].start()
+      }
     }
-    // e.ports[1].onmessage = (msgEvt) => {
-    //   console.log('utility.js receive message from port[1]', msgEvt.data)
-    // }
+
+    // 只能接收到数组中第一个 port 的消息内容
+    // const [port] = e.ports;
+    // port.on('message', (e) => {
+    //   console.log('Received message: e.data ===>', e.data);
+    // });
+    // port.start();
   })
 
   var addon = require('bindings')('hello-node-api');
