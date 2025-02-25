@@ -104,14 +104,14 @@ npm install electron-log --registry https://registry.npmmirror.com
 
   **[解决方案]**<br>
   1. 使用`@electron/rebuild`[参考 Native Node Modules](https://www.electronjs.org/docs/latest/tutorial/using-native-node-modules)
-      ``` bash
-      npm install --save-dev @electron/rebuild
-      # Every time you run "npm install", run this:
-      ./node_modules/.bin/electron-rebuild
-      ```
+        ``` bash
+        npm install --save-dev @electron/rebuild
+        # Every time you run "npm install", run this:
+        ./node_modules/.bin/electron-rebuild
+        ```
 
-- 使用消息端口进行跨进程通信
-**[问题描述]**
+- 使用消息端口进行跨进程通信<br/>
+  **[问题描述]**
   1. 主进程与渲染进程通信失败
   2. 主进程与效率进程通信失败
 
@@ -121,13 +121,13 @@ npm install electron-log --registry https://registry.npmmirror.com
 
   **[解决方案]**<br>
   1. 主进程与渲染进程多端口通信
-      ``` bash
-      for 循环
-      ```
+        ``` bash
+        for 循环
+        ```
   2. 主进程与效率进程多端口通信
-      ``` bash
-      for 循环
-      必须调用 port.start()，否则无法接收到消息内容
-      ```
+        ``` bash
+        for 循环
+        必须调用 port.start()，否则无法接收到消息内容
+        ```
 
 - 其他
