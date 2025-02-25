@@ -11,14 +11,17 @@ log.eventLogger.startLogging()
 
 // Node Addon Testing
 try{
-  var addon = require('bindings')('hello-node-api');
-  console.log(addon.hello2());
+  var nodd_api = require('bindings')('hello-node-api');
+  log.info('main.js ', nodd_api.sayHello());
+  log.info('main.js add 110 + 119 =', nodd_api.add(110, 119));
 
-  var addon = require('bindings')('hello-node-addon');
-  console.log(addon.hello3());
-  console.log(addon.hello4());
+  var node_addon = require('bindings')('hello-node-addon');
+  log.info('main.js ', node_addon.sayHello1());
+  log.info('main.js ', node_addon.sayHello2());
+  log.info('main.js add1 110 + 119 =', node_addon.add1(110, 119));
+  log.info('main.js add2 110 + 119 =', node_addon.add2(110, 119));
 } catch (error) {
-  console.log("main.js require binding addon failed! ", error)
+  log.info("main.js require binding addon failed! ", error)
 }
 
 function createWindow () {
@@ -28,7 +31,7 @@ function createWindow () {
     height: 600,
     frame: true, // 菜单栏 和 系统按钮均被删除 最下化、最大化/还原、关闭）
     webPreferences: {
-      // sandbox: false, // 默认情况下沙箱是开启状态，因安全考虑在 preload.js 中加载 nodeaddon 会失败。
+      sandbox: false, // 默认情况下沙箱是开启状态，因安全考虑在 preload.js 中加载 nodeaddon 会失败。
       preload: path.join(__dirname, '../renderer/preload.js')
     }
   })
@@ -89,7 +92,7 @@ function spawmUtilityProcess () {
       log.info('main.js receive message from child process data ==>', data)
     })
 
-    console.log('after posting message to utility process')
+    log.info('after posting message to utility process')
     setInterval(() => {
       // log.info('This is a log message from the main.js  will posting message from port1');
       msgCh1.port1.postMessage({message:'main.js post messge to utility.js with msgCh1.port1 inside spawmUtilityProcess'})
@@ -100,14 +103,14 @@ function spawmUtilityProcess () {
     }, 1000);
 
     child.on('spawn', () => {
-      console.log('spawm child utility process pid =', child.pid)
+      log.info('spawm child utility process pid =', child.pid)
     })
 
     child.on('exit', () => {
-      console.log('exit child utility process pid =', child.pid)
+      log.info('exit child utility process pid =', child.pid)
     })
   } catch (error) {
-    console.log("create utility process failed! ", error)
+    log.info("create utility process failed! ", error)
   }
 }
 

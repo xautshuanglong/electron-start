@@ -10,8 +10,15 @@
 if (!process.sandboxed){
   try{
     // renderer process 中使用 nodeaddon 需要在 main.js 加载 preload.js 时关闭沙箱
-    var addon = require('bindings')('hello-node-api');
-    __electronLog.info(addon.hello2());
+    var node_api = require('bindings')('hello-node-api');
+    __electronLog.info('preload.js', node_api.sayHello());
+    __electronLog.info('preload.js add 110 + 119 =', node_api.add(110, 119));
+    
+    var node_addon = require('bindings')('hello-node-addon');
+    __electronLog.info('preload.js', node_addon.sayHello1());
+    __electronLog.info('preload.js', node_addon.sayHello2());
+    __electronLog.info('preload.js add1 110 + 119 =', node_addon.add1(110, 119));
+    __electronLog.info('preload.js add2 110 + 119 =', node_addon.add2(110, 119));
   } catch (error) {
     __electronLog.info("preload.js require binding addon failed! ", error)
   }
