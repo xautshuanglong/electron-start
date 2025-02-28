@@ -136,19 +136,21 @@ npm install electron-log --registry https://registry.npmmirror.com
 
 流程图测试
 
----------- mermaid ----------
+``` mermaid
 flowchart TD
     A[Christmas] -->|Get money| B(Go shopping)
     B --> C{Let me think}
     C -->|One| D[fa:fa-laptop Laptop]
     C -->|Two| E[fa:fa-mobile iPhone]
     C -->|Three| F[fa:fa-car Car]
+```
 
 
----------- mermaid ----------
+``` mermaid
 graph TD
     A --> B
     A --> C
     B --> D
     C --> D
+```
 
