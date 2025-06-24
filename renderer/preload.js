@@ -25,6 +25,7 @@ if (!process.sandboxed){
 }
 
 const {contextBridge, ipcRenderer} = require('electron')
+const crypto = require('crypto')
 // const log = require('electron-log')
 
 // 日志模块初始化
@@ -44,7 +45,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
 contextBridge.exposeInMainWorld('electronAPI', {
   SetTitle: (title)=>ipcRenderer.send('Set-Title', title),
-  SetProgressBar: (progress)=>ipcRenderer.send('Set-Progress-Bar', progress)
+  SetProgressBar: (progress)=>ipcRenderer.send('Set-Progress-Bar', progress),
+  CaculateSh256: (plainText) => {
+    const sha256Text = crypto.createHash('sha256').update(plainText).digest('hex')
+    console.log("preload.js sha256Text=", sha256Text)
+    return sha256Text
+  }
 })
 
 ipcRenderer.on('port', (e, data) => {

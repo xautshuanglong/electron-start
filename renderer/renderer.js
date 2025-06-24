@@ -11,7 +11,11 @@ const log = __electronLog
 var gClickCout = 0;
 const inputTitle = document.getElementById('inputTitle')
 const btnChangeTitle = document.getElementById('btnChangeTitle')
+
 const btnClickCount = document.getElementById('btnClickCount')
+
+const editPlainText = document.getElementById('editPlainText')
+const btnCryptoSh256 = document.getElementById('btnCryptoSh256')
 
 if (btnChangeTitle == null){
     log.info('null element')
@@ -28,6 +32,12 @@ btnClickCount.addEventListener('click', () => {
         spanClickCount.innerText = gClickCout
     }
     window.electronAPI.SetProgressBar(gClickCout)
+})
+
+btnCryptoSh256.addEventListener('click', () => {
+    const plainText = editPlainText.value
+    const sha256Text = window.electronAPI.CaculateSh256(plainText)
+    log.info('renderer.js sha256(' + plainText + ')=' + sha256Text)
 })
 
 setInterval(() => {
