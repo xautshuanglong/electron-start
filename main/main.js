@@ -4,6 +4,8 @@ const { app, ipcMain, crashReporter, nativeImage, BrowserWindow,
 const log = require('electron-log/main')
 const path = require('node:path')
 
+var mainWindow, winSettings
+
 // 日志模块初始化
 log.initialize()
 log.eventLogger.startLogging()
@@ -100,7 +102,7 @@ function spawmUtilityProcess () {
 
       // child 可正常发送消息
       // child.postMessage({testing:"main.js post message to utility.js whit child.postMessage"})
-    }, 1000);
+    }, 10000);
 
     child.on('spawn', () => {
       log.info('spawm child utility process pid =', child.pid)
@@ -197,4 +199,28 @@ ipcMain.on('Set-Progress-Bar', (event, progress) => {
   const webContent = event.sender
   const window = BrowserWindow.fromWebContents(webContent)
   window.setProgressBar(percent)
+})
+
+ipcMain.on('Open-Window-Settings', (event, progress) => {
+   winSettings = new BrowserWindow({
+    width: 400,
+    height: 300,
+    frame: true, // 菜单栏 和 系统按钮均被删除 最下化、最大化/还原、关闭）
+    parent: mainWindow,
+    modal: true,
+    webPreferences: {
+      sandbox: false,
+      preload: path.join(__dirname, '../renderer/settings_preload.js')
+    }
+  })
+  // winSettings.setMenu(null); // 只移除默认菜单栏，系统按钮还在（最下化、最大化/还原、关闭）
+  winSettings.loadFile('renderer/settings.html')
+})
+
+ipcMain.on('To-Index', (e, data) => {
+   mainWindow.webContents.postMessage('To-Index', data)
+})
+
+ipcMain.on('To-Settings', (e, data) => {
+   winSettings.webContents.postMessage('To-Settings', data)
 })

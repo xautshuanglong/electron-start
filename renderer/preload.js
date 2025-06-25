@@ -29,7 +29,7 @@ const crypto = require('crypto')
 // const log = require('electron-log')
 
 // 日志模块初始化
-__electronLog.info("inside preload.js", {a:1})
+__electronLog.info("inside preload.js",{a :1})
 // log.info("inside preload.js")
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -50,7 +50,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     const sha256Text = crypto.createHash('sha256').update(plainText).digest('hex')
     console.log("preload.js sha256Text=", sha256Text)
     return sha256Text
-  }
+  },
+  OpenSettingsWindow: () => ipcRenderer.send('Open-Window-Settings'),
+  SendMessage: (msgContent) => ipcRenderer.send('To-Settings', msgContent)
 })
 
 ipcRenderer.on('port', (e, data) => {
@@ -66,4 +68,8 @@ ipcRenderer.on('port', (e, data) => {
       e.ports[i].start()
     }
   }
+})
+
+ipcRenderer.on('To-Index', (e, data) => {
+  console.log('preload.js receive msg : ' + data)
 })
