@@ -6,6 +6,8 @@ const path = require('node:path')
 
 var mainWindow, winSettings
 
+// process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
+
 // 日志模块初始化
 log.initialize()
 log.eventLogger.startLogging()
@@ -42,7 +44,8 @@ function createWindow () {
 
   // and load the index.html of the app.
   mainWindow.loadFile('renderer/index.html')
-  // mainWindow.loadURL('https://www.baidu.com/index.html')
+  // mainWindow.loadFile('vue_dist/index.html') // vue 项目构建时需使用本地资源路径，默认 /xxx.js 会加载盘符根目录 x:/xxx.js
+  // mainWindow.loadURL('http://localhost:8080/') // 配合 VUE 项目联调
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
