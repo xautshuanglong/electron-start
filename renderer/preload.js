@@ -25,7 +25,7 @@ if (!process.sandboxed){
 }
 
 const {contextBridge, ipcRenderer} = require('electron')
-const crypto = require('crypto')
+const crypto = require('crypto') // 依赖 Node 环境，需要渲染进程开启 Node 集成，这样会带来安全隐患，https://www.electronjs.org/docs/latest/tutorial/security
 // const log = require('electron-log')
 
 // 日志模块初始化

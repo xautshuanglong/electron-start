@@ -35,7 +35,8 @@ function createWindow () {
     height: 600,
     frame: true, // 菜单栏 和 系统按钮均被删除 最下化、最大化/还原、关闭）
     webPreferences: {
-      sandbox: false, // 默认情况下沙箱是开启状态，因安全考虑在 preload.js 中加载 nodeaddon 会失败。
+      // sandbox: false, // 默认情况下沙箱是开启状态，因安全考虑在 preload.js 中加载 nodeaddon 会失败。
+      nodeIntegration: true, // 开起 Node 集成会自动禁用沙盒能力
       preload: path.join(__dirname, '../renderer/preload.js')
     }
   })
@@ -45,7 +46,7 @@ function createWindow () {
   // and load the index.html of the app.
   mainWindow.loadFile('renderer/index.html')
   // mainWindow.loadFile('vue_dist/index.html') // vue 项目构建时需使用本地资源路径，默认 /xxx.js 会加载盘符根目录 x:/xxx.js
-  // mainWindow.loadURL('http://localhost:8080/') // 配合 VUE 项目联调
+  // mainWindow.loadURL('http://localhost:8080/') // 配合 VUE 项目联调，有安全警告，https://www.baidu.com 也不例外
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
