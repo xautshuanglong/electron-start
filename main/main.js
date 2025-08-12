@@ -6,6 +6,12 @@ const path = require('node:path')
 
 var mainWindow, winSettings
 
+// 保证只有一个应用实例运行
+if (!app.requestSingleInstanceLock()) {
+  app.quit()
+  return
+}
+
 // process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 
 // 日志模块初始化
@@ -169,11 +175,20 @@ app.on('window-all-closed', function () {
   log.info('app.on window-all-closed ...')
   if (process.platform !== 'darwin') {
     app.quit()
+    return
   }
 })
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+app.on('second-instance', (event, commandLine, workingDirectory)=>{
+  log.debug("new isntance created: "+ commandLine)
+  let allWin = BrowserWindow.getAllWindows()
+  allWin.map(win => {
+    win.show()
+  })
+})
 
 app.on('will-quit', function() {
   log.info('app.on will-quit ...')
