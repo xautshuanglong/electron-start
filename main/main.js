@@ -51,7 +51,7 @@ function createWindow () {
 
   // and load the index.html of the app.
   mainWindow.loadFile('renderer/index.html')
-  // mainWindow.loadFile('vue_dist/index.html') // vue 项目构建时需使用本地资源路径，默认 /xxx.js 会加载盘符根目录 x:/xxx.js, vue.config.js 中添加 publicPath: './'
+  // mainWindow.loadFile('vue_dist/index.html') // vue 项目构建时需使用本地资源路径，默认 /xxx.js 会加载盘符根目录 x:/xxx.js, vue.config.js 中添加 publicPath: './'。vite 设置环境变量（可以是配置文件） VITE_BASE_URL=./
   // mainWindow.loadURL('http://localhost:8080/') // 配合 VUE 项目联调，有安全警告，https://www.baidu.com 也不例外
   // mainWindow.loadFile('react_dist/index.html') // 绝对路径改为相对路径，package.json 中添加 "homepage": "./"
   // mainWindow.loadURL('http://localhost:3000/') // 配合 React 项目联调
