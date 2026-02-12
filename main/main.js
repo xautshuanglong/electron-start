@@ -41,6 +41,7 @@ function createWindow () {
     width: 800,
     height: 600,
     frame: true, // 菜单栏 和 系统按钮均被删除 最下化、最大化/还原、关闭）
+    // frame: false, // 自定义标题栏，配合样式 -webkit-app-region: drag 拖拽网页内容实现窗口拖拽
     webPreferences: {
       // sandbox: false, // 默认情况下沙箱是开启状态，因安全考虑在 preload.js 中加载 nodeaddon 会失败。
       nodeIntegration: true, // 开起 Node 集成会自动禁用沙盒能力
