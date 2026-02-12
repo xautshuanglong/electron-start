@@ -52,6 +52,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     return sha256Text
   },
   OpenSettingsWindow: () => ipcRenderer.send('Open-Window-Settings'),
+  OpenTransparentWindow: () => ipcRenderer.send('Open-Window-Transparent'),
   SendMessage: (msgContent) => ipcRenderer.send('To-Settings', msgContent)
 })
 

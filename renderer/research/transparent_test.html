@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+    <link rel="stylesheet" type="text/css" href="./transparent_test.css">
+    <title>Hello World! -- Transparent</title>
+  </head>
+  <body>
+
+    <h1>透明窗口测试</h1>
+    <div style="display: flex; justify-content: center;">
+      <div class="blue_div">不透明</div>
+      <div class="green_div">半透明</div>
+    </div>
+
+    <!-- You can also require other files to run in this process -->
+    <script src="./transparent_test.js"></script>
+  </body>
+</html>

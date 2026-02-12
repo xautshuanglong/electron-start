@@ -20,6 +20,7 @@ const btnCryptoSh256 = document.getElementById('btnCryptoSh256')
 const editMsgContent = document.getElementById('editMsgContent')
 const btnSendMsg = document.getElementById('btnSendMsg')
 const btnOpenSettings = document.getElementById('btnOpenSettings')
+const btnOpenTransparent = document.getElementById('btnOpenTransparent')
 
 if (btnChangeTitle == null){
     log.info('null element')
@@ -58,6 +59,11 @@ btnOpenSettings.addEventListener('click', () => {
     // const childWindow = window.open('', 'modal')
     // childWindow.document.write('<h1>Hello</h1>')
     window.electronAPI.OpenSettingsWindow()
+})
+
+btnOpenTransparent.addEventListener('click', () => {
+    log.info('settings.js will open transparent test window')
+    window.electronAPI.OpenTransparentWindow()
 })
 
 setInterval(() => {

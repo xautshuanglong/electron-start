@@ -3,6 +3,7 @@ const { app, ipcMain, crashReporter, nativeImage, BrowserWindow,
   utilityProcess, MessageChannelMain } = require('electron')
 const log = require('electron-log/main')
 const path = require('node:path')
+const { truncate } = require('original-fs')
 
 var mainWindow, winSettings
 
@@ -239,6 +240,21 @@ ipcMain.on('Open-Window-Settings', (event, progress) => {
   })
   // winSettings.setMenu(null); // 只移除默认菜单栏，系统按钮还在（最下化、最大化/还原、关闭）
   winSettings.loadFile('renderer/settings.html')
+})
+
+ipcMain.on('Open-Window-Transparent', (event, progress) => {
+   winSettings = new BrowserWindow({
+    width: 400,
+    height: 300,
+    frame: false, // 菜单栏 和 系统按钮均被删除 最下化、最大化/还原、关闭）
+    parent: mainWindow,
+    transparent: true,
+    webPreferences: {
+      sandbox: false,
+      // preload: path.join(__dirname, '../renderer/research/settings_preload.js')
+    }
+  })
+  winSettings.loadFile('renderer/research/transparent_test.html')
 })
 
 ipcMain.on('To-Index', (e, data) => {
